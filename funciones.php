@@ -59,15 +59,15 @@ function insertarPersonas($ID_usuario, $nombre, $edad, $telefono)//nombre de la 
     $salida = 0;//inicializacion de la variable
     $conexion = mysqli_connect("localhost", "root", "root", "db_factura"); // Conexión a la base de datos
 
-    if ($conexion === false) {
+    if ($conexion === false) {//verifica la conexion de la base de datos
         die("Error de conexión: " . mysqli_connect_error());
     }
 
     // Comprobamos si el ID ya existe
-    $sql_comprobar = "SELECT * FROM usuario WHERE ID_usuario = '$ID_usuario'";
-    $resultado = mysqli_query($conexion, $sql_comprobar);
+    $sql = "SELECT * FROM usuario WHERE ID_usuario = '$ID_usuario'";//selecciona el usuario que uno tenga en la base de datos
+    $resultado = mysqli_query($conexion, $sql);//envía la consulta SQL al servidor
 
-    if (mysqli_num_rows($resultado) > 0) {
+    if (mysqli_num_rows($resultado) > 0) {//resultado de la conexion query
         // El ID ya existe
         $salida = 0;
     } else {
@@ -76,14 +76,14 @@ function insertarPersonas($ID_usuario, $nombre, $edad, $telefono)//nombre de la 
         $sql .= "VALUES ('$ID_usuario', '$nombre', '$edad', '$telefono')";
 
         try {
-            if ($conexion->query($sql) === true) {
-                $salida = 1;
+            if ($conexion->query($sql) === true) {//verificar una consulta
+                $salida = 'usuario insertado con exito';//es un mensaje que se proporciona si se desea
             } else {
-                $salida = 0;
+                $salida = 'error al insertar';//otro mensaje
             }
-        } catch (mysqli_sql_exception $e) {
+        } catch (mysqli_sql_exception $e) {//tomar excepciones especificas
             
-            $e->getMessage();
+            $e->getMessage();//es para ver el mensaje de error
         }
     }
 
@@ -93,6 +93,48 @@ function insertarPersonas($ID_usuario, $nombre, $edad, $telefono)//nombre de la 
 
 
 
+
+
+
+function borrarUsuario($ID_usuario) {
+    $salida = 0; // Inicialización de la variable
+    $conexion = mysqli_connect("localhost", "root", "root", "db_factura"); // Conexión a la base de datos
+
+    if ($conexion === false) {//verificar la conexion de la base de datos
+        die("Error de conexión: " . mysqli_connect_error());// si falla la base de datos esta linea se ejecuta
+    }
+
+    // Comprobamos si el usuario existe
+    $sql = "SELECT * FROM usuario WHERE ID_usuario = '$ID_usuario'";
+    $resultado = mysqli_query($conexion, $sql);
+
+    if (mysqli_num_rows($resultado) > 0) { //verificacion de la consulta que devuelve un resultado
+        
+        $sql = "DELETE FROM usuario WHERE ID_usuario = '$ID_usuario'";// eliminacion de usuario que ya existe
+
+        try {
+            if ($conexion->query($sql) === true) {//verificar una consulta
+                $salida = "usuario eliminado"; //este mensaje sale cuando el usuario ah sido eliminado con exito
+            } else {
+                $salida = "usuario no eliminado"; //esto aparece cuando se produce error al eliminar
+            }
+        } catch (mysqli_sql_exception $e) {
+            // Manejo de excepciones
+            $e->getMessage();
+        }
+    } else {
+        // El usuario no existe
+        $salida = 0;
+    }
+
+    $conexion->close(); // Cierre de la conexión
+    return $salida; // Retorna el resultado
+}
+
+
+function actualizacionDeDatos(){
+    
+}
 
 
 

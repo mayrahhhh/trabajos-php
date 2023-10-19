@@ -12,4 +12,10 @@ include("funciones.php");
 
 //echo calculo_version2();
 
-echo conteo();
+//echo conteo();
+
+//echo insertarPersonas('7', 'Hanna', '2', '31541');
+
+//echo borrarusuario('7');
+
+echo actualizacionDeDatos();
