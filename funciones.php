@@ -22,7 +22,7 @@ function aprender(){ //nombre de la funcion
 
     return $salida; //retorna la operación
 }
-function calculo_version2() {
+function calculo_version2() {//nombre de la funcion
     $salida = 0;//inicializacion de la variable
     $conexion = mysqli_connect("localhost", "root", "root", "db_factura");//cpnexion de la base de datos
     $sql = "SELECT 10 as n1, 20 as n2";
@@ -53,6 +53,48 @@ function conteo() {//nombre de la funcion
 
     return $salida;//retorna la operación
 }
+
+function insertarPersonas($ID_usuario, $nombre, $edad, $telefono)//nombre de la funcion
+{
+    $salida = 0;//inicializacion de la variable
+    $conexion = mysqli_connect("localhost", "root", "root", "db_factura"); // Conexión a la base de datos
+
+    if ($conexion === false) {
+        die("Error de conexión: " . mysqli_connect_error());
+    }
+
+    // Comprobamos si el ID ya existe
+    $sql_comprobar = "SELECT * FROM usuario WHERE ID_usuario = '$ID_usuario'";
+    $resultado = mysqli_query($conexion, $sql_comprobar);
+
+    if (mysqli_num_rows($resultado) > 0) {
+        // El ID ya existe
+        $salida = 0;
+    } else {
+        // El ID no existe
+        $sql = "INSERT INTO usuario(ID_usuario, nombre, edad, telefono) ";
+        $sql .= "VALUES ('$ID_usuario', '$nombre', '$edad', '$telefono')";
+
+        try {
+            if ($conexion->query($sql) === true) {
+                $salida = 1;
+            } else {
+                $salida = 0;
+            }
+        } catch (mysqli_sql_exception $e) {
+            
+            $e->getMessage();
+        }
+    }
+
+    $conexion->close(); // Cierre de la conexión
+    return $salida; // Retorna el resultado
+}
+
+
+
+
+
 
 
 
